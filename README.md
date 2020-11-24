@@ -11,11 +11,11 @@ Make will compile separate server and client applications:
 make
 ```
 
-## USE
+## USAGE
 To run the server, you need to specify which file you want to send:
 ```
 ./server -f <file path>
 ```
 To run the client, you need to specify the folder where to save the received file:
 ```
-./client -f <path to folder>
+./client -f <folder path>
