@@ -1,0 +1,16 @@
+# exclude test file directories
+files_received/*
+files_send/*
+
+# exclude everything inside build
+build/*
+!build/.gitkeep
+
+# exclude built apps
+client
+server
+
+# exclude SocketTester
+SocketTest.jar
+
+
