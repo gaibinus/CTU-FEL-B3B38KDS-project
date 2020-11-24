@@ -54,10 +54,10 @@ class socketClass{
 
         void waifForPing(void);                                 // wait for incoming ping
         void sendPing(void);                                    // ping server
-        
+
         void sendDataFrame(struct dataFrameClass* frame);       // send data frame
         void sendAckFrame(struct ackFrameClass* frame);         // send acknowledgement frame
-        
+
         int  receiveDataFrame(struct dataFrameClass* frame);    // receive data frame
         int  receiveAckFrame(struct ackFrameClass* frame);      // receive acknowledgement class
 };

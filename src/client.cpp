@@ -73,6 +73,7 @@ int main(int argc, char **argv){
         else if(state == -2) {
             ackFrame.type = '-';
             sock.sendAckFrame(&ackFrame);
+            continue;
         }
 
         // frame id is old -> good ACK
@@ -122,7 +123,7 @@ int main(int argc, char **argv){
             file.hash = sha256(file.pointer);
 
             // compare hashes
-            if(strcmp(file.hash.c_str(), (char *)dataFrame.data) != 0)
+            if(strcmp(file.hash.c_str(), dataFrame.data) != 0)
                 printf("WARNING: hash not match");
 
             // close file

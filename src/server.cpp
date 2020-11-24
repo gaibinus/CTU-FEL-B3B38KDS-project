@@ -91,19 +91,16 @@ int main(int argc, char **argv){
         // waits for responce (skip if timeout or bad CRC)
         if(sock.receiveAckFrame(&ackFrame) != 0) continue;
         
-        // check if frame is ACK
-        if(ackFrame.type == '+' || ackFrame.type == '-') {
-            // check if is positive ACK and frame ID matches
-            if(ackFrame.type == '+' && ackFrame.id == dataFrame.id) {
-                // move scheduler
-                if(scheduler < 2 || scheduler == 3) scheduler++;
-                else if(scheduler == 2 && (dataFrame.id-2) * (FRAME_SIZE-11) >= file.size) scheduler++;
+        // check if is positive ACK and frame ID matches
+        if(ackFrame.type == '+' && ackFrame.id == dataFrame.id) {
+            // move scheduler
+            if(scheduler != 2) scheduler++;
+            else if(scheduler == 2 && (dataFrame.id-2) * (FRAME_SIZE-11) >= file.size) scheduler++;
 
-                dataFrame.id++;
-            }
-            else if (ackFrame.id > dataFrame.id) 
-                errPrintf("received ACK ID greater than sent data ID");
+            dataFrame.id++;
         }
+        else if (ackFrame.id > dataFrame.id) 
+            errPrintf("received ACK ID greater than sent data ID");
     }
 
     return 0;
