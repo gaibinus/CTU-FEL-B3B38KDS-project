@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
             fclose(file.pointer);
 
             // set terminal timeout
-            local.updateTimeout(5, 0);
+            local.updateTimeout(2, 0);
         }
 
         // send good ack frame

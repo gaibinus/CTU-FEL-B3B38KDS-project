@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     // create socket classes, init them and bind local one
     socketClass target;
     socketClass local;
-    target.init(CLIENT_IP, SERVER_TARGET, false);
+    target.init("0.0.0.0", SERVER_TARGET, false);
     local.init("0.0.0.0", SERVER_LOCAL, true);
 
     // COMMUNICATION /////////////////////////////////////////////////////////////////////////////////////////

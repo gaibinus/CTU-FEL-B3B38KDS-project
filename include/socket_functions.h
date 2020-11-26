@@ -18,14 +18,14 @@
 
 
 /* definitions to share between client and server */
-# define TIMEOUT_S 1
-# define TIMEOUT_US 0
+# define TIMEOUT_S 0
+# define TIMEOUT_US 500000
 # define FRAME_SIZE 1024
 # define SERVER_IP "25.58.246.19"
 # define CLIENT_IP "25.59.70.175"
 
 # define SERVER_LOCAL 15001         // A
-# define SERVER_TARGET 14000        // B
+# define SERVER_TARGET 15000        // B
 # define CLIENT_LOCAL 15000         // A
 # define CLIENT_TARGET 14001        // B
 
