@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     socketClass target;
     socketClass local;
     target.init(CLIENT_IP, SERVER_TARGET, false);
-    local.init(SERVER_IP, SERVER_LOCAL, true);
+    local.init("0.0.0.0", SERVER_LOCAL, true);
 
     // COMMUNICATION /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     local.waifForPing();
 
     // update socket timeout
-    local.updateTimeout(0, TIMEOUT_US);
+    local.updateTimeout(TIMEOUT_S, TIMEOUT_US);
 
     // scheduler 0:file name, 1:file size, 2:data, 3:hash
     int scheduler = 0;

@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     // create socket classes and init them
     socketClass local;
     socketClass target;
-    local.init(CLIENT_IP, CLIENT_LOCAL, true);
+    local.init("0.0.0.0", CLIENT_LOCAL, true);
     target.init(SERVER_IP, CLIENT_TARGET, false);
     
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     ackFrameClass ackFrame; ackFrame.id = 0;
 
     // update socket timeout
-    local.updateTimeout(0, TIMEOUT_US);
+    local.updateTimeout(TIMEOUT_S, TIMEOUT_US);
 
     // ping scheck
     bool ping= false;
@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
             fclose(file.pointer);
 
             // set terminal timeout
-            local.updateTimeout(1, 0);
+            local.updateTimeout(5, 0);
         }
 
         // send good ack frame
