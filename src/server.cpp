@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
         if(ackFrame.type == '+' && ackFrame.id == dataFrame.id) {
             // move scheduler
             if(scheduler != 2) scheduler++;
-            else if(scheduler == 2 && (dataFrame.id-2) * (FRAME_SIZE-11) >= file.size) scheduler++;
+            else if(scheduler == 2 && (dataFrame.id-1) * (FRAME_SIZE-11) >= file.size) scheduler++;
 
             // move to next frame
             dataFrame.id++;
