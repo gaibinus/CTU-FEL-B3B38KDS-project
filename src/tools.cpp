@@ -18,12 +18,12 @@ void fileClass::processFile(char* new_path) {
     pointer = fopen(path.c_str(), "rb");
     if(pointer==NULL) errPrintf("opening file");
 
+    // compute and store hash (before size check)
+    hash = sha256(pointer);
+
     // determine file size
     if(fseek(pointer, 0, SEEK_END) != 0) errPrintf("loading file size");
     size = ftell(pointer);
-
-    // compute and store hash
-    hash = sha256(pointer);
 
     // inform user
     printf("File processed successfully\n");
@@ -54,7 +54,7 @@ void errPrintf(std::string msg) {
 std::string sha256(FILE* file) {
     // prepare buffers and vars
     unsigned char hash[SHA256_DIGEST_LENGTH];
-    unsigned char buffer[1024];
+    unsigned char buffer[256];
     int bytesRead = 0;
 
     // initialize SHA class
@@ -62,7 +62,7 @@ std::string sha256(FILE* file) {
     if(!SHA256_Init(&sha256)) printf("initializing SHA");
 
     // loop thru file while updating SHA class, close file
-    while((bytesRead = fread(buffer, 1, 1024, file)))
+    while((bytesRead = fread(buffer, 1, 256, file)))
         if(!SHA256_Update(&sha256, buffer, bytesRead)) printf("updating SHA");
 
     // finalize SHA class

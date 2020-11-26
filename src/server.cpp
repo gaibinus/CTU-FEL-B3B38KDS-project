@@ -31,13 +31,11 @@ int main(int argc, char **argv){
 
     // SOCKET CREATION ///////////////////////////////////////////////////////////////////////////////////////
 
-    // create socket class and init it as server
-    socketClass sock;
-    sock.init("server");
-
-    // bind server socket
-    sock.bindServer();
-
+    // create socket classes, init them and bind local one
+    socketClass target;
+    socketClass local;
+    target.init(SERVER_TARGET, false);
+    local.init(SERVER_LOCAL, true);
 
     // COMMUNICATION /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,10 +45,10 @@ int main(int argc, char **argv){
 
     // wait for client to ping
     printf("Ready to serve client\n");
-    sock.waifForPing();
+    local.waifForPing();
 
     // update socket timeout
-    sock.updateTimeout(10, 0);
+    local.updateTimeout(0, TIMEOUT_US);
 
     // scheduler 0:file name, 1:file size, 2:data, 3:hash
     int scheduler = 0;
@@ -63,21 +61,18 @@ int main(int argc, char **argv){
             dataFrame.dataLen = file.name.length()+1;
             memcpy(&dataFrame.data, file.name.c_str(), dataFrame.dataLen);
         }
-
         // create frame with file size 
         else if(scheduler == 1) {
             dataFrame.type = 'S';
             dataFrame.dataLen = sizeof(uint32_t);
             memcpy(&dataFrame.data, (uint8_t *)&file.size, dataFrame.dataLen);
         }
-
         // create frame with data
         else if(scheduler == 2) {
             dataFrame.type = 'D';
             fseek(file.pointer, ((dataFrame.id-2) * (FRAME_SIZE-11)), SEEK_SET);
             dataFrame.dataLen = fread(&dataFrame.data, 1, (FRAME_SIZE-11), file.pointer);
         }
-
         // create frame with HASH
         else if(scheduler == 3) {
             dataFrame.type = 'H';
@@ -86,21 +81,24 @@ int main(int argc, char **argv){
         }
         
         // send created frame and update expected id
-        sock.sendDataFrame(&dataFrame);
+        target.sendDataFrame(&dataFrame);
 
         // waits for responce (skip if timeout or bad CRC)
-        if(sock.receiveAckFrame(&ackFrame) != 0) continue;
+        if(local.receiveAckFrame(&ackFrame, dataFrame.id) != 0)
+            continue;
         
-        // check if is positive ACK and frame ID matches
+        // positive ACK and frame ID matches -> move to next frame
         if(ackFrame.type == '+' && ackFrame.id == dataFrame.id) {
             // move scheduler
             if(scheduler != 2) scheduler++;
             else if(scheduler == 2 && (dataFrame.id-2) * (FRAME_SIZE-11) >= file.size) scheduler++;
 
+            // move to next frame
             dataFrame.id++;
         }
-        else if (ackFrame.id > dataFrame.id) 
-            errPrintf("received ACK ID greater than sent data ID");
+        // anything else -> repeat frame
+        else
+            continue;
     }
 
     return 0;

@@ -13,4 +13,6 @@ server
 # exclude SocketTester
 SocketTest.jar
 
+# exclude NetDerper
+NetDerper/*
 

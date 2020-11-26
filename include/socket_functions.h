@@ -18,9 +18,14 @@
 
 
 /* definitions to share between client and server */
-# define IP_ADDR "127.0.0.1"
-# define PORT 8080
+# define TIMEOUT_US 50000
 # define FRAME_SIZE 1024
+# define IP_ADDR "127.0.0.1"
+
+# define SERVER_LOCAL 15001
+# define SERVER_TARGET 14000
+# define CLIENT_LOCAL 15000
+# define CLIENT_TARGET 14001
 
 /* CRC32 magic number */
 # define CRCmagic 558161692
@@ -37,19 +42,15 @@ extern std::map<char, std::string> frameTypeDict;
 /* class for socket info */
 class socketClass{
     private:
-        int                 fileDescr;                          // socket file descriptor
-        bool                gender;                             // socket identity: true = server, false = client
-        struct sockaddr_in  server_addr;                        // server addres
-        socklen_t           server_size;                        // client addres
-        struct sockaddr_in  client_addr;                        // client addres
-        socklen_t           client_size;                        // client addres size
+        int                 descr;                              // socket file descriptor
+        struct sockaddr_in  addr;                               // server addres
+        socklen_t           addrSize;                           // client addres
         struct timeval      timeout;                            // socket timeout structure
 
     public:
-        void init(std::string set_gender);                      // initialize socket
-        ~socketClass() {close(fileDescr);}                      // class descrutor
+        void init(int port, bool bindFlag);                     // initialize socket
+        ~socketClass() {close(descr);}                          // class descrutor
 
-        void bindServer(void);                                  // bind server
         void updateTimeout(int sec, int usec);                  // update socket timeout
 
         void waifForPing(void);                                 // wait for incoming ping
@@ -58,8 +59,8 @@ class socketClass{
         void sendDataFrame(struct dataFrameClass* frame);       // send data frame
         void sendAckFrame(struct ackFrameClass* frame);         // send acknowledgement frame
 
-        int  receiveDataFrame(struct dataFrameClass* frame);    // receive data frame
-        int  receiveAckFrame(struct ackFrameClass* frame);      // receive acknowledgement class
+        int  receiveDataFrame(struct dataFrameClass* frame, uint32_t idExp);    // receive data frame
+        int  receiveAckFrame(struct ackFrameClass* frame, uint32_t idExp);      // receive acknowledgement class
 };
 
 

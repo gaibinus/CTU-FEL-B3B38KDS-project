@@ -1,5 +1,5 @@
 CXX      := -g++ -std=c++17
-CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror -Wno-deprecated-copy -Wno-ignored-attributes -O0 -g
+CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror -Wno-deprecated-copy -Wno-ignored-attributes -fsanitize=address -O0 -g
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -lssl -lcrypto
 BUILD	 := ./build
 OBJ_DIR  := $(BUILD)/objects
