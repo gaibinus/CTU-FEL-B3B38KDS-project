@@ -20,7 +20,8 @@
 /* definitions to share between client and server */
 # define TIMEOUT_US 50000
 # define FRAME_SIZE 1024
-# define IP_ADDR "127.0.0.1"
+# define SERVER_IP "127.0.0.1"
+# define CLIENT_IP "25.59.70.175"
 
 # define SERVER_LOCAL 15001
 # define SERVER_TARGET 14000
@@ -48,7 +49,7 @@ class socketClass{
         struct timeval      timeout;                            // socket timeout structure
 
     public:
-        void init(int port, bool bindFlag);                     // initialize socket
+        void init(const char* ip, int port, bool bindFlag);    // initialize socket
         ~socketClass() {close(descr);}                          // class descrutor
 
         void updateTimeout(int sec, int usec);                  // update socket timeout

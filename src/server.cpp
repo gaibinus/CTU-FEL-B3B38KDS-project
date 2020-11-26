@@ -14,7 +14,7 @@ struct test{
 }__attribute__((packed));
 
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
     
     // FILE MANAGEMENT //////////////////////////////////////////////////////////////////////////////////////
     
@@ -34,8 +34,8 @@ int main(int argc, char **argv){
     // create socket classes, init them and bind local one
     socketClass target;
     socketClass local;
-    target.init(SERVER_TARGET, false);
-    local.init(SERVER_LOCAL, true);
+    target.init(SERVER_IP, SERVER_TARGET, false);
+    local.init(SERVER_IP, SERVER_LOCAL, true);
 
     // COMMUNICATION /////////////////////////////////////////////////////////////////////////////////////////
 

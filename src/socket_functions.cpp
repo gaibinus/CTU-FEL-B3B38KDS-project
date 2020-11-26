@@ -16,7 +16,7 @@ std::map<char, std::string> frameTypeDict = {
 
 // SOCKET CLASS FUNCTIONS //////////////////////////////////////////////////////////////////////////////////////
 
-void socketClass::init(int port, bool bindFlag) {
+void socketClass::init(const char* ip, int port, bool bindFlag) {
     // initialize address size
     addrSize = sizeof(addr);
 
@@ -32,7 +32,7 @@ void socketClass::init(int port, bool bindFlag) {
     // fill server information 
     addr.sin_family = AF_INET;                   // IPv4
     addr.sin_port = htons(port);                 // listen to port
-    addr.sin_addr.s_addr = inet_addr(IP_ADDR);   // listen to address
+    addr.sin_addr.s_addr = inet_addr(ip);   // listen to address
 
     // skip if no bind
     if(bindFlag) {

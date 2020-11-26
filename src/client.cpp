@@ -18,7 +18,7 @@ using namespace std;
 
 // MAIN /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
 
     // FILE MANAGEMENT ///////////////////////////////////////////////////////////////////////////////////////
     
@@ -41,8 +41,8 @@ int main(int argc, char **argv){
     // create socket classes and init them
     socketClass local;
     socketClass target;
-    local.init(CLIENT_LOCAL, true);
-    target.init(CLIENT_TARGET, false);
+    local.init(CLIENT_IP, CLIENT_LOCAL, true);
+    target.init(CLIENT_IP, CLIENT_TARGET, false);
     
 
     // COMMUNICATION /////////////////////////////////////////////////////////////////////////////////////////
