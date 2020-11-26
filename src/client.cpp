@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     socketClass local;
     socketClass target;
     local.init(CLIENT_IP, CLIENT_LOCAL, true);
-    target.init(CLIENT_IP, CLIENT_TARGET, false);
+    target.init(SERVER_IP, CLIENT_TARGET, false);
     
 
     // COMMUNICATION /////////////////////////////////////////////////////////////////////////////////////////

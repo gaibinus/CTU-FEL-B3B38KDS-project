@@ -18,15 +18,15 @@
 
 
 /* definitions to share between client and server */
-# define TIMEOUT_US 50000
+# define TIMEOUT_US 500000
 # define FRAME_SIZE 1024
-# define SERVER_IP "127.0.0.1"
+# define SERVER_IP "25.58.246.19"
 # define CLIENT_IP "25.59.70.175"
 
-# define SERVER_LOCAL 15001
+# define SERVER_LOCAL 15000
 # define SERVER_TARGET 14000
 # define CLIENT_LOCAL 15000
-# define CLIENT_TARGET 14001
+# define CLIENT_TARGET 14000
 
 /* CRC32 magic number */
 # define CRCmagic 558161692
