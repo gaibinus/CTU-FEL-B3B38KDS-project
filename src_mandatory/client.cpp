@@ -55,10 +55,7 @@ int main(int argc, char **argv) {
     local.updateTimeout(TIMEOUT_S, TIMEOUT_US);
 
     // ping scheck
-    bool ping = false;
-    
-    // scheduler 0:file name, 1:file size, 2:data, 3:hash
-    int scheduler = 0;
+    bool ping= false;
 
     // keep receiving frames
     while(true) {
@@ -66,7 +63,7 @@ int main(int argc, char **argv) {
         if(!ping) target.sendPing();
 
         // wait for server responce
-        int state = local.receiveDataFrame(&dataFrame);
+        int state = local.receiveDataFrame(&dataFrame, ackFrame.id);
 
         // timeout -> repeat, timeot + hash -> finito
         if(state == -1) {
@@ -81,7 +78,7 @@ int main(int argc, char **argv) {
         }
 
         // already processed frame -> send good ack
-        if((dataFrame.type == 'N' && scheduler > 0) || (dataFrame.type == 'S' && scheduler > 1)) {
+        if(ackFrame.id > dataFrame.id) {
             // save expected ID
             uint32_t tmpId = ackFrame.id;
 
@@ -94,16 +91,14 @@ int main(int argc, char **argv) {
             ackFrame.id = tmpId;
             continue;
         }
-
         // file name -> process
-        if(dataFrame.type == 'N') {
+        else if(dataFrame.type == 'N') {
             // assign file name and update path
             file.name.assign(string(dataFrame.data));
             file.path.append('/' + file.name);
 
-            // inform user and move scheduler
+            // inform user
             printf("- received file name: %s\n", file.name.c_str());
-            scheduler = 1;
 
             // remove timeout and ping
             local.updateTimeout(0, 0);
@@ -114,9 +109,8 @@ int main(int argc, char **argv) {
             // assign file size
             memcpy(&file.size, &dataFrame.data, sizeof(uint32_t));
 
-            // inform user and move scheduler
+            // inform user
             printf("- received file size: %d[B]\n", file.size);
-            scheduler = 2;
 
             // crate destination file and store its pointer
             file.pointer = fopen(file.path.c_str(), "wb+");
@@ -146,9 +140,8 @@ int main(int argc, char **argv) {
             }
             printf("#### PASS: hash match\n");
 
-            // close file and move scheduler
+            // close file
             fclose(file.pointer);
-            scheduler = 3;
 
             // set terminal timeout
             local.updateTimeout(2, 0);
@@ -158,7 +151,11 @@ int main(int argc, char **argv) {
         ackFrame.id = dataFrame.id;
         ackFrame.type = '+';
         target.sendAckFrame(&ackFrame);
+
+        // expect next data
+        ackFrame.id = dataFrame.id + 1;
     }
+
     
     return 0;
 }

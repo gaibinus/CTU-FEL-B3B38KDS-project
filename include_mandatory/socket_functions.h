@@ -10,24 +10,19 @@
 #include <stdlib.h> 
 #include <iostream>
 #include <string.h>
-#include <deque>
-#include <vector>
 
 #include <sys/socket.h> // sockets
 #include <arpa/inet.h>  // sockaddr_in
 #include <map>          // dictionary
 #include <unistd.h>     // close()
-#include <sys/time.h>   // time measurement
-#include <math.h>       // ceil
 
 
 /* definitions to share between client and server */
-# define TIMEOUT_S 1
-# define TIMEOUT_US 0
+# define TIMEOUT_S 0
+# define TIMEOUT_US 500000
 # define FRAME_SIZE 1024
-# define WINDOW_SIZE 5
-# define SERVER_IP "127.0.0.1"
-# define CLIENT_IP "127.0.0.1"
+# define SERVER_IP "25.58.246.19"
+# define CLIENT_IP "25.59.70.175"
 
 # define SERVER_LOCAL 15001         // A
 # define SERVER_TARGET 14000        // B
@@ -44,15 +39,6 @@
 extern std::map<char, std::string> frameTypeDict;
 
 
-// FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* returns current time */
-double getCurrentTime(); 
-
-/* returns elapsed time */
-double getElapsedTime(double start);
-
-
 // CLASSES //////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* class for socket info */
@@ -64,7 +50,7 @@ class socketClass{
         struct timeval      timeout;                            // socket timeout structure
 
     public:
-        void init(const char* ip, int port, bool bindFlag);     // initialize socket
+        void init(const char* ip, int port, bool bindFlag);    // initialize socket
         ~socketClass() {close(descr);}                          // class descrutor
 
         void updateTimeout(int sec, int usec);                  // update socket timeout
@@ -75,8 +61,8 @@ class socketClass{
         void sendDataFrame(struct dataFrameClass* frame);       // send data frame
         void sendAckFrame(struct ackFrameClass* frame);         // send acknowledgement frame
 
-        int  receiveDataFrame(struct dataFrameClass* frame);    // receive data frame
-        int  receiveAckFrame(struct ackFrameClass* frame);      // receive acknowledgement class
+        int  receiveDataFrame(struct dataFrameClass* frame, uint32_t idExp);    // receive data frame
+        int  receiveAckFrame(struct ackFrameClass* frame, uint32_t idExp);      // receive acknowledgement class
 };
 
 
@@ -96,27 +82,6 @@ struct ackFrameClass {
     uint8_t  type;                  // type: positive or negative ACK
     uint32_t crc;                   // CRC
 }__attribute__((packed));
-
-
-/* class for frame dequeue */
-struct frameRecord {
-    uint32_t id;                    // frame ID
-    double   stamp;                 // timestamp of frame sending
-
-    frameRecord(uint32_t id_in, double stamp_in) {  // class constructor
-        id = id_in;
-        stamp = stamp_in;
-    }
-};
-
-
-/* class for window management */
-struct windowClass {
-    std::deque<uint32_t> queue;         // waiting queue for frames
-    std::vector<frameRecord> onAir;     // vector of active frames
-
-    void fillQueue(uint32_t fileSize);  // fills waiting queue
-};
 
 
 #endif
