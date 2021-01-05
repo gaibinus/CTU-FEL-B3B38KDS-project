@@ -26,13 +26,13 @@
 # define TIMEOUT_US 0
 # define FRAME_SIZE 1024
 # define WINDOW_SIZE 5
-# define SERVER_IP "127.0.0.1"
+# define SERVER_IP "25.58.246.19"
 # define CLIENT_IP "127.0.0.1"
 
-# define SERVER_LOCAL 15001         // A
-# define SERVER_TARGET 14000        // B
-# define CLIENT_LOCAL 15000         // A
-# define CLIENT_TARGET 14001        // B
+# define SERVER_LOCAL  15001    // A
+# define SERVER_TARGET 14000    // B
+# define CLIENT_LOCAL  15000    // A
+# define CLIENT_TARGET 14001    // B
 
 /* CRC32 magic number */
 # define CRCmagic 558161692
