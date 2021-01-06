@@ -22,10 +22,10 @@
 
 
 /* definitions to share between client and server */
-# define TIMEOUT_S 1
-# define TIMEOUT_US 0
+# define TIMEOUT_S 0
+# define TIMEOUT_US 100000
 # define FRAME_SIZE 1024
-# define WINDOW_SIZE 5
+# define WINDOW_SIZE 10
 # define SERVER_IP "25.58.246.19"
 # define CLIENT_IP "127.0.0.1"
 

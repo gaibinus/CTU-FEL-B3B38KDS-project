@@ -156,15 +156,12 @@ int main(int argc, char **argv) {
                 }
             }
 
-            // negative ACK -> remove from onAir and push to queue
+            // negative ACK -> remove everything from onAir and push to queue
             else if(ackFrame.type == '-' && scheduler == 2) {
-                    window.queue.push_front(ackFrame.id);
-                    for(uint32_t i=0; i<window.onAir.size(); i++) {
-                        if(window.onAir[i].id == ackFrame.id) {
-                            window.onAir.erase(window.onAir.begin() + i);
-                            break;
-                        }
-                    }
+                for(uint32_t i=0; i<window.onAir.size(); i++) {
+                    window.queue.push_front(window.onAir[i].id);
+                    window.onAir.erase(window.onAir.begin() + i);
+                }
             }
         }
     }
